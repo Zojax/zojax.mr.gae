@@ -1,7 +1,7 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
-version = '0.2'
+version = '0.7'
 
 install_requires = [
     'setuptools',
@@ -9,7 +9,7 @@ install_requires = [
     ]
 
 
-setup(name='mr.developer',
+setup(name='zojax.mr.gae',
     version=version,
     description="A zc.buildout extension to ease the development of large projects with lots of packages.",
     long_description='Extention download google_appengine end cteate symlincks to lib in src folder',
@@ -23,11 +23,15 @@ setup(name='mr.developer',
     author_email='',
     url='https://github.com/Zojax/zojax.mr.gae',
     license='GPL',
-    packages=['mr.gae'],
-    package_dir = {'': 'src'},
-    namespace_packages=['mr'],
+    packages=find_packages('src'),
+    package_dir = {'':'src'},
+    namespace_packages=['zojax', 'zojax.mr'],
     include_package_data=True,
     zip_safe=False,
     install_requires=install_requires,
+    entry_points="""
+      [zc.buildout.extension]
+      default = zojax.mr.gae.extension:extension
+      """,
 
 )
