@@ -11,8 +11,8 @@ install_requires = [
 
 setup(name='zojax.mr.gae',
     version=version,
-    description="A zc.buildout extension to ease the development of large projects with lots of packages.",
-    long_description='Extention download google_appengine end cteate symlincks to lib in src folder',
+    description="Simple GAE-extension for buildout",
+    long_description='Extention downloads google_appengine and alows installation GAE libs in development mode',
     classifiers=[
         "Programming Language :: Python",
         "Framework :: Buildout",

@@ -1,8 +1,4 @@
-import logging
-from nevow.livepage import self
 import os
-import re
-import sys
 import urllib2
 from zipfile import *
 
@@ -20,28 +16,27 @@ class Extension(object):
 
     def download_package(self):
         filename = self.url.split('/')[-1]
-        path_to_file = os.path.join(self.extraxt_dir, filename)
+        path_to_file = os.path.join(self.buildout_dir, 'downloads', filename)
         try:
-            open(path_to_file, 'r')
-            return path_to_file
+            localFile =open(path_to_file, 'r')
+            return localFile
         except IOError as e:
             remotefile = urllib2.urlopen(self.url)
             #print remotefile.info()['Content-Disposition']
             localFile = open(path_to_file, 'w')
-            print 'Downloading file %s to' %filename
+            print 'Downloading file %s to %s' % (filename, os.path.join(self.buildout_dir, 'downloads', filename))
             localFile.write(remotefile.read())
             localFile.seek(0)
             print 'Download complete'
-            path_to_file.seek(0)
             return localFile
 
     def extract_package(self, archive):
         if is_zipfile(archive):
-            print 'Start extracting %s to %s/parts' % (archive, self.buildout_dir)
+            print 'Start extracting %s to %s/parts' % (archive.name, os.path.join(self.buildout_dir, 'parts'))
             zip_file = ZipFile(archive)
-            zip_file.extractall(self.buildout_dir + '/parts')
+            zip_file.extractall(os.path.join(self.buildout_dir, 'parts'))
         else:
-            print "File %s is not zip" % archive
+            print "File %s is not zip" % archive.name
 
     def chenge_develop_cection(self):
         for package in self.packages:
@@ -50,7 +45,6 @@ class Extension(object):
                 self.buildout['buildout']['develop'] += '\n' + path
             else:
                 print "Package %s does not in GAE. It will be skiping" % package
-        print self.buildout['buildout']['develop']
 
 
     def __call__(self):
@@ -59,7 +53,7 @@ class Extension(object):
             self.extract_package(gae_archive)
             self.chenge_develop_cection()
         else:
-            print 'GAE is currentky downloaded'
+            print 'GAE is currently downloaded'
 
 def extension(buildout=None):
     return Extension(buildout)()
