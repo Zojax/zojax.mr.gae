@@ -25,12 +25,12 @@ class Extension(object):
             #print remotefile.info()['Content-Disposition']
             if not os.path.exists(os.path.join(self.buildout_dir, 'downloads')):
                 os.makedirs(os.path.join(self.buildout_dir, 'downloads'))
-            localFile = open(path_to_file, 'w')
+            localFile = open(path_to_file, 'wb')
             print 'Downloading file %s to %s' % (filename, os.path.join(self.buildout_dir, 'downloads', filename))
             localFile.write(remotefile.read())
-            localFile.seek(0)
+            localFile.close()
             print 'Download complete'
-            return localFile
+            return self.download_package()
 
     def extract_package(self, archive):
         if is_zipfile(archive):
@@ -46,7 +46,7 @@ class Extension(object):
             if os.path.exists(path):
                 self.buildout['buildout']['develop'] += '\n' + path
             else:
-                print "Package %s does not in GAE. It will be skiping" % package
+                print "Package %s is not found." % package
 
 
     def __call__(self):
