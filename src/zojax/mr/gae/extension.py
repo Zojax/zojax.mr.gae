@@ -23,6 +23,8 @@ class Extension(object):
         except IOError as e:
             remotefile = urllib2.urlopen(self.url)
             #print remotefile.info()['Content-Disposition']
+            if not os.path.exists(os.path.join(self.buildout_dir, 'downloads')):
+                os.makedirs(os.path.join(self.buildout_dir, 'downloads'))
             localFile = open(path_to_file, 'w')
             print 'Downloading file %s to %s' % (filename, os.path.join(self.buildout_dir, 'downloads', filename))
             localFile.write(remotefile.read())
